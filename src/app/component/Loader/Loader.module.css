@@ -1,0 +1,10 @@
+.loader_wrapper {
+    width: 100%;
+    height: 100%;
+  }
+  .loader_text {
+    color: var(--accent-green);
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    font-family: 500;
+  }
