@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 const withMT = require("@material-tailwind/react/utils/withMT");
 const config = withMT({
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -19,6 +19,9 @@ const config = withMT({
     },
     extend: {
       colors: {
+        "dark-purple": "#081A51",
+        "light-white": "rgba(255,255,255,0.18)",
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -74,7 +77,7 @@ const config = withMT({
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}) satisfies Config
+  plugins: [require("tailwindcss-animate"),require("daisyui")],
+}) satisfies Config;
 
-export default config
+export default config;

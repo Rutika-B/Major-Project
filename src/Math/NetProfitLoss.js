@@ -6,8 +6,7 @@ export const NetPnL = async () => {
     let netProfitLoss = 0;
     tradesData.forEach((trade) => {
       const profitLoss =
-        trade.quantity * trade.sell_amount -
-        trade.quantity * trade.buy_amount;
+        trade.quantity * trade.sell_amount - trade.quantity * trade.buy_amount;
       netProfitLoss += profitLoss;
     });
     console.log("Net profit/loss:", netProfitLoss);
@@ -100,6 +99,9 @@ export const AverageWinLossTrade = async () => {
 };
 export const DailyPnL = async () => {
   const tradesData = await ProfitLoss();
+  console.log("----------------Profit Losss in sorted order------------");
+
+  // console.log(tradesData);
   if (tradesData) {
     const dailyProfitLoss = {};
 

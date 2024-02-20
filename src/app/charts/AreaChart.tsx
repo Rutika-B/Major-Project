@@ -33,7 +33,7 @@ const Example = () => {
           })
         );
         setData(transformedData);
-        console.log(data);
+        console.log(transformedData);
         const gradientOffset = () => {
           const dataMax = Math.max(
             ...transformedData.map((i: { uv: any }) => i.uv)
@@ -61,14 +61,16 @@ const Example = () => {
     // setOff(dummyOffset);
   }, []);
   if (!data) {
-    return <Loader />;
+    return <div>Loading your trading graph...</div>;
   }
   return (
-    
-      <ResponsiveContainer width="70%" height="30%" className="bg-white mx-2">
+    <>
+      
+      
+      <ResponsiveContainer width="100%" height="100%" className="bg-white mx-2">
         <AreaChart
-          width={50}
-          height={60}
+          width={500}
+          height={600}
           data={data}
           margin={{
             top: 10,
@@ -95,8 +97,10 @@ const Example = () => {
           />
         </AreaChart>
       </ResponsiveContainer>
+    </>
   
   );
 };
 
 export default Example;
+

@@ -54,7 +54,7 @@ const HeroCard = async () => {
   return (
     <div className="flex lg:grid-cols-4 md:grid-cols-3">
       {heroData.map(({ id, title, value, present }) => (
-        <div key={id} className="w-40 h-50 mx-4 my-2 px-2 py-3 bg-white">
+        <div key={id} className="w-52 h-50 mx-4 my-2 px-2 py-3 bg-white">
           <div className="hero">
             <div className="hero-content lg:flex-row-reverse">
               <div className="flex-col py-2">

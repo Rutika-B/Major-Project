@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/app/component/Sidebar";
 
-import { CustomProvider } from 'rsuite';
-import 'rsuite/dist/rsuite.min.css';
+import { CustomProvider } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
+import { StoreProvider } from "@/store/StoreProvider";
+import SideBar from "@/app/component/Sidebar";
+import Allchildren from "./Allchildren";
+import Header from "./component/Header";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -19,17 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="flex flex-row relative">
-          <div className="lg:mr-56">
-            <Sidebar />
+    <StoreProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <div className="flex">
+            <SideBar />
+            <Header/>
+            <Allchildren>{children}</Allchildren>
+            {/* <CustomProvider>{children}</CustomProvider> */}
           </div>
-          <CustomProvider>{children}</CustomProvider>
-        
-
-        </div>
-      </body>
-    </html>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
