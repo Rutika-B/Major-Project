@@ -24,7 +24,7 @@ const stats = [
 ];
 function Stats() {
   return (
-    <div className="flex flex-col items-center justify-center m-2 px-2 border rounded-md bg-white border-gray-500">
+    <div className="flex flex-col items-center w-1/6 justify-center m-2 px-2 border rounded-md bg-white border-gray-500">
       <Typography className="my-2 pt-3" variant="h4">
         Stats
       </Typography>

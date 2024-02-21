@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { DateRangeInput, DateRangePicker, Stack } from "rsuite";
 import { ValueType } from "rsuite/esm/Checkbox";
+const { allowedMaxDays } = DateRangePicker;
 function Header() {
   const count = useSelector((state: RootState) => state.counter.value);
   const [dateRange, setDateRange] = useState<any>([null, null]);
@@ -12,6 +13,7 @@ function Header() {
     console.log("Selected Date Range: ", value);
     setDateRange(value);
   };
+
   return (
     <div
       className={`fixed z-10 ${
@@ -33,6 +35,7 @@ function Header() {
           >
             <DateRangePicker
               format="dd.MM.yyyy"
+              shouldDisableDate={allowedMaxDays(365)}
               onChange={handleDateRangeChange}
               value={dateRange}
             />

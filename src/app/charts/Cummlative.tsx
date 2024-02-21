@@ -1,5 +1,5 @@
 "use client";
-import { DailyPnL } from "@/Math/NetProfitLoss";
+import { CummulativePnL, DailyPnL } from "@/Math/NetProfitLoss";
 import React, { useState, useEffect } from "react";
 import {
   ResponsiveContainer,
@@ -9,6 +9,8 @@ import {
   YAxis,
   Tooltip,
   Area,
+  LineChart,
+  Line,
 } from "recharts";
 import Loader from "../component/Loader/Loader";
 
@@ -16,20 +18,20 @@ interface DataItem {
   date: string;
   profitLoss: any;
 }
-const Example = () => {
+const Cummulative = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
   const [off, setOff] = useState(0.67);
 
   useEffect(() => {
     const getData = async () => {
-      const dummyData = await DailyPnL();
+      const dummyData = await CummulativePnL();
 
       console.log(dummyData);
       if (dummyData) {
         const transformedData = dummyData.map(
-          (item: { date: string; profitLoss: any }) => ({
+          (item: { date: string; cumulativeProfitLoss: any }) => ({
             name: item.date, // Date from API response will be mapped to name in the chart
-            uv: item.profitLoss, // ProfitLoss from API response will be mapped to uv in the chart
+            uv: item.cumulativeProfitLoss, // ProfitLoss from API response will be mapped to uv in the chart
           })
         );
         setData(transformedData);
@@ -68,7 +70,7 @@ const Example = () => {
       
       
       <ResponsiveContainer width="100%" height="90%" className="bg-white mx-2">
-        <AreaChart
+        <LineChart
           width={500}
           height={600}
           data={data}
@@ -89,18 +91,18 @@ const Example = () => {
               <stop offset={off} stopColor="red" stopOpacity={1} />
             </linearGradient>
           </defs>
-          <Area
+          <Line
             type="monotone"
             dataKey="uv"
             stroke="#000"
             fill="url(#splitColor)"
           />
-        </AreaChart>
+        </LineChart>
       </ResponsiveContainer>
     </>
   
   );
 };
 
-export default Example;
+export default Cummulative;
 

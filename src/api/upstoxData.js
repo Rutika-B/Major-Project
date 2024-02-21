@@ -1,4 +1,5 @@
 import axios from "axios";
+import {Filter} from "@/Filter/AscendingDate";
 const Token=process.env.NEXT_PUBLIC_APP_TOKEN
 export const BrokerageDetails = async () => {
  
@@ -66,24 +67,26 @@ export const ProfitLoss = async () => {
 
   const params = {
     segment: "FO",
-    financial_year: "2324",
+    financial_year: "2122",
     page_number: 1,
-    page_size: 100,
+    page_size: 500,
   };
 
   try {
     const response = await axios.get(url, { headers, params });
     console.log("....................Profit and Loss---------------");
-    console.log(response.data.data);
+  
     const tradesData=response.data.data;
-    const sortedData = tradesData.slice().sort((a, b) => {
-      // Convert buy_date strings to Date objects
-      const dateA = new Date(a.buy_date.split("-").reverse().join("-"));
-      const dateB = new Date(b.buy_date.split("-").reverse().join("-"));
+    const sortedData=Filter(tradesData);
+    // const sortedData = tradesData.slice().sort((a, b) => {
+    //   // Convert buy_date strings to Date objects
+    //   const dateA = new Date(a.buy_date.split("-").reverse().join("-"));
+    //   const dateB = new Date(b.buy_date.split("-").reverse().join("-"));
 
-      // Compare the dates
-      return dateA - dateB;
-    });
+    //   // Compare the dates
+    //   return dateA - dateB;
+    // });
+    console.log(sortedData);
     return sortedData;
   } catch (error) {
     console.error(error);

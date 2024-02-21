@@ -1,3 +1,4 @@
+import { Filter } from "@/Filter/AscendingDate";
 import { ProfitLoss } from "@/api/upstoxData";
 
 export const NetPnL = async () => {
@@ -121,6 +122,40 @@ export const DailyPnL = async () => {
       date,
       profitLoss: dailyProfitLoss[date],
     }));
+    console.log(result);
+    return result;
+  } else {
+    console.log("Failed to fetch trades data. Check console for error.");
+    return null;
+  }
+};
+
+export const CummulativePnL = async () => {
+  const tradesData = await ProfitLoss();
+  const dailyProfitLoss = {};
+
+  // Iterate through trades and calculate profit/loss for each date
+  if (tradesData) {
+    tradesData.forEach((trade) => {
+      const date = trade.buy_date;
+      const profitLoss = trade.sell_amount - trade.buy_amount;
+      if (!dailyProfitLoss[date]) {
+        dailyProfitLoss[date] = profitLoss;
+      } else {
+        dailyProfitLoss[date] += profitLoss;
+      }
+    });
+
+    const result = [];
+    let cumulativeProfitLoss = 0;
+    console.log(dailyProfitLoss);
+    Object.keys(dailyProfitLoss)
+    .forEach((date) => {
+      console.log(date);
+      cumulativeProfitLoss += dailyProfitLoss[date];
+      result.push({ date, cumulativeProfitLoss });
+    });
+    console.log("-----------------CummulativePnL---------------------");
     console.log(result);
     return result;
   } else {
