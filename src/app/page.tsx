@@ -1,51 +1,56 @@
-import { DailyPnL } from "@/Math/NetProfitLoss";
-import Example from "./charts/AreaChart";
-import HalfCircle from "./charts/HalfCircle";
-import HeroCard from "./component/Herocard";
-import {
-  BrokerageDetails,
-  Holdings,
-  Positions,
-  ProfitLoss,
-} from "@/api/upstoxData";
-import App from "./charts/Calendar/Calendar";
-import { ReactNode } from "react";
-import Stats from "./component/Stats";
-import Cummulative from "./charts/Cummlative";
-interface Props {
-  children?: ReactNode;
-  title: string;
-  // any props that come into the component
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import React from "react";
+import { Navebar } from "./component/Navebar";
+import BlogList from "./component/BlogCards/BlogCard";
+import Footer from "./component/Footer/Footer";
+import { Button } from "@/components/ui/button";
+interface Database {
+  Database: any;
 }
-const Home = async () => {
-  const info = await ProfitLoss();
-  const data = await Holdings();
-
+const page = async () => {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
-    <>
-      <div className="flex flex-col">
-        <HeroCard />
-        <div className="flex flex-row items-start">
-          <Stats />
-          <div className="flex flex-col items-center justify-center w-auto mr-2">
-            <div className="p-2 my-2 border border-slate-900 bg-slate-900/50 rounded-xl h-[400px]">
-              <h3 className="text-xl font-semibold text-black mb-2">
-                Net Daily P&L
-              </h3>
-              <Example />
-            </div>
-            <div className="p-2 my-2 border border-slate-900 bg-slate-900/50 rounded-xl h-[400px]">
-              <h3 className="text-xl font-semibold text-black mb-2">
-                Net Cummulative P&L
-              </h3>
-              <Cummulative />
-            </div>
+    <div>
+      {/* <h1>no user</h1> */}
+      <div>
+        <Navebar />
+
+        <div className=" flex justify-center items-center ">
+          <div className=" w-3/5 text-center  pt-12">
+            <h1 className="text-6xl text-gray-900  font-extrabold leading-normal">
+              All in one Trading Journal for the derivative market traders{" "}
+            </h1>
+            <span className="text-xl text-gray-800 ">
+              A platform for a stock market FnO traders to improve theire
+              trading skill and performance by analysing there previous trades
+            </span>
+            <br />
+            <Link href={"/sign-up"}>
+              <Button size={`lg`} className="mt-10">
+                Start..
+              </Button>
+            </Link>
           </div>
         </div>
+        <div>
+          <BlogList />
+        </div>
 
-        <App />
+        <div>
+          <Footer />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
-export default Home;
+
+export default page;

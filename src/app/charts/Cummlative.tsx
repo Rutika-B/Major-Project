@@ -13,6 +13,9 @@ import {
   Line,
 } from "recharts";
 import Loader from "../component/Loader/Loader";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { QueryDates } from "@/Filter/QueryDate";
 
 interface DataItem {
   date: string;
@@ -21,14 +24,18 @@ interface DataItem {
 const Cummulative = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
   const [off, setOff] = useState(0.67);
-
+  const Range = useSelector(
+    (state: RootState) => state.reducer.dateRange
+  );
+  const fromD=Range.fromDate;
+  const toD=Range.toDate;
   useEffect(() => {
     const getData = async () => {
-      const dummyData = await CummulativePnL();
-
-      console.log(dummyData);
+      const dummyData = await CummulativePnL({fromD,toD});
+      const filteredDate=QueryDates({fromD,toD,dummyData});
+      console.log(filteredDate);
       if (dummyData) {
-        const transformedData = dummyData.map(
+        const transformedData = filteredDate.map(
           (item: { date: string; cumulativeProfitLoss: any }) => ({
             name: item.date, // Date from API response will be mapped to name in the chart
             uv: item.cumulativeProfitLoss, // ProfitLoss from API response will be mapped to uv in the chart
@@ -61,7 +68,7 @@ const Cummulative = () => {
     getData();
     // const dummyOffset = 0.67;
     // setOff(dummyOffset);
-  }, []);
+  }, [fromD,toD]);
   if (!data) {
     return <div>Loading your trading graph...</div>;
   }

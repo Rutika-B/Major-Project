@@ -6,11 +6,19 @@ interface Props {
   children?: ReactNode;
 }
 
-function Allchildren({ children }) {
-  const count = useSelector((state: RootState) => state.counter.value);
+const Allchildren = ({ children }) => {
+
+  const toggleSide = useSelector((state: RootState) => state.reducer.toggleSide.value);
+  
   return (
-    <div className={`${count ? "pl-[21%]" : "pl-[7%]"} duration-300 bg-gray-100 pt-20`}>{children}</div>
+    <div
+      className={`${
+        toggleSide ? "pl-[21%]" : "pl-[7%]"
+      } duration-300 w-full bg-gray-100 pt-20`}
+    >
+      {children}
+    </div>
   );
-}
+};
 
 export default Allchildren;

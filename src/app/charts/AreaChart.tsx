@@ -11,6 +11,10 @@ import {
   Area,
 } from "recharts";
 import Loader from "../component/Loader/Loader";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { QueryDates } from "@/Filter/QueryDate";
+import { ReportMetaData, tradeCharges } from "@/api/upstoxData";
 
 interface DataItem {
   date: string;
@@ -19,14 +23,23 @@ interface DataItem {
 const Example = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
   const [off, setOff] = useState(0.67);
+  const Range = useSelector((state: RootState) => state.reducer.dateRange);
+  const fromD = Range.fromDate;
+  const toD = Range.toDate;
 
   useEffect(() => {
     const getData = async () => {
-      const dummyData = await DailyPnL();
-
+      await ReportMetaData();
+      const dummyData = await DailyPnL({ fromD, toD });
+      const charges = await tradeCharges({ fromD, toD });
+      console.log(charges);
       console.log(dummyData);
-      if (dummyData) {
-        const transformedData = dummyData.map(
+
+      //Function to parse dd-mm-yyyy date to yyyy-mm-dd format
+      const filteredDate=QueryDates({fromD,toD,dummyData});
+      console.log(filteredDate);
+      if (filteredDate) {
+        const transformedData = filteredDate.map(
           (item: { date: string; profitLoss: any }) => ({
             name: item.date, // Date from API response will be mapped to name in the chart
             uv: item.profitLoss, // ProfitLoss from API response will be mapped to uv in the chart
@@ -59,14 +72,12 @@ const Example = () => {
     getData();
     // const dummyOffset = 0.67;
     // setOff(dummyOffset);
-  }, []);
+  }, [fromD, toD]);
   if (!data) {
     return <div>Loading your trading graph...</div>;
   }
   return (
     <>
-      
-      
       <ResponsiveContainer width="100%" height="90%" className="bg-white mx-2">
         <AreaChart
           width={500}
@@ -98,9 +109,7 @@ const Example = () => {
         </AreaChart>
       </ResponsiveContainer>
     </>
-  
   );
 };
 
 export default Example;
-

@@ -16,6 +16,8 @@
     "@radix-ui/react-progress": "^1.0.3",
     "@reduxjs/toolkit": "^2.2.1",
     "@rsuite/icons": "^1.0.3",
+    "@supabase/auth-helpers-nextjs": "^0.9.0",
+    "@supabase/supabase-js": "^2.39.7",
     "apexcharts": "^3.45.2",
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",

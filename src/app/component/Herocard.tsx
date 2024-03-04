@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   AverageWinLossTrade,
   NetPnL,
@@ -7,14 +8,36 @@ import {
 } from "@/Math/NetProfitLoss";
 import ProgressDemo from "../charts/Progress";
 import HalfCircle from "../charts/HalfCircle";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-const HeroCard = async () => {
-  const netPL = await NetPnL();
-  console.log(netPL);
-  const win = await TradeWin();
-  console.log(win);
-  const factor = await ProfitFactor();
-  const avgWinLoss = await AverageWinLossTrade();
+const HeroCard = () => {
+  const [netPL, setnetPL] = useState<string | null>("");
+  const [win, setWin] = useState<string | null>("");
+  const [factor, setfactor] = useState<string | null | 0>("");
+  const [avgWinLoss, setavg] = useState<string | null>("");
+
+  const Range = useSelector((state: RootState) => state.reducer.dateRange);
+  const fromD = Range.fromDate;
+  const toD = Range.toDate;
+  
+  useEffect(() => {
+    const getStats = async () => {
+      console.log(fromD);
+      console.log(toD);
+      const netPL = await NetPnL({fromD,toD});
+      setnetPL(netPL);
+      console.log(netPL);
+      const win = await TradeWin({fromD,toD});
+      setWin(win);
+      console.log(win);
+      const factor = await ProfitFactor({fromD,toD});
+      setfactor(factor);
+      const avgWinLoss = await AverageWinLossTrade({fromD,toD});
+      setavg(avgWinLoss);
+    };
+    getStats();
+  }, [fromD,toD]);
   const heroData = [
     {
       id: 1,

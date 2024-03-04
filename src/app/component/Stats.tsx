@@ -4,22 +4,22 @@ const stats = [
   {
     id: 1,
     title: "Big Win",
-    value: 34,
+    value: 7657,
   },
   {
     id: 1,
     title: "Big loss",
-    value: 34,
+    value: 354,
   },
   {
     id: 1,
     title: "Total Fees",
-    value: 34,
+    value: 889,
   },
   {
     id: 1,
     title: "Best Day",
-    value: "Sunday",
+    value: "Tuesday",
   },
 ];
 function Stats() {

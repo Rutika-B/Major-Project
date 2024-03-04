@@ -1,15 +1,24 @@
 "use client";
 import { ProfitLoss } from "@/api/upstoxData";
+import { RootState } from "@/store/store";
 import { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { useSelector } from "react-redux";
 
 const HalfCircle = () => {
   const [val, setval] = useState<any | number>(13);
+  const Range = useSelector(
+    (state: RootState) => state.reducer.dateRange
+  );
+  const fromD=Range.fromDate;
+  const toD=Range.toDate;
+
   useEffect(() => {
-    const data = ProfitLoss();
+    const data = ProfitLoss({fromD,toD});
     setval(data);
-  }, []);
+  }, [fromD,toD]);
+
   const [state, setState] = useState({
     series: [val],
     options: {

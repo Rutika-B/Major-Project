@@ -1,37 +1,54 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, combineReducers } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 // export interface CounterState {
 //   value: number;
 // }
-export interface CounterState {
+export interface ToggleState {
   value: Boolean;
 }
+export interface dateRangeState {
+  fromDate: string;
+  toDate: string;
+}
 
-const initialState: CounterState = {
+const initialState: ToggleState = {
   value: false,
 };
+const initialRange: dateRangeState = {
+  fromDate: "26-08-2021",
+  toDate: "01-09-2021",
+};
 
-export const counterSlice = createSlice({
-  name: "counter",
+export const ToggleSlice = createSlice({
+  name: "ToggleSide",
   initialState,
   reducers: {
-    // increment: (state) => {
-    //   state.value += 1;
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1;
-    // },
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload;
-    // },
-    change:(state,action:PayloadAction<Boolean>)=>{
-        state.value=!action.payload;
-    }
+    change: (state, action: PayloadAction<Boolean>) => {
+      state.value = !action.payload;
+    },
   },
 });
-
+export const rangeSlice = createSlice({
+  name: "dateRange",
+  initialState: initialRange,
+  reducers: {
+    selectedRange: (
+      state,
+      action: PayloadAction<{ fromDate: string; toDate: string }>
+      ) => {
+        state.fromDate = action.payload.fromDate;
+        state.toDate = action.payload.toDate;
+        console.log(state.fromDate);
+        console.log(state.toDate);
+      },
+  },
+});
 // export const { increment, decrement, incrementByAmount } = counterSlice.actions;
-export const {change}=counterSlice.actions;
-
-export default counterSlice.reducer;
+export const { change } = ToggleSlice.actions;
+export const { selectedRange } = rangeSlice.actions;
+const rootReducer = combineReducers({
+  toggleSide: ToggleSlice.reducer,
+  dateRange: rangeSlice.reducer,
+});
+export default rootReducer;
