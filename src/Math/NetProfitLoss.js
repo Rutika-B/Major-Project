@@ -1,21 +1,17 @@
-'use client'
 import { Filter } from "@/Filter/AscendingDate";
 import { ProfitLoss } from "@/api/upstoxData";
 import { QueryDates } from "@/Filter/QueryDate";
+import { GetFilteredProfitLoss } from "@/Filter/getFilteredProfitLoss";
 
-export const NetPnL = async ({fromD,toD}) => {
-  const tradesData = await ProfitLoss({fromD,toD});
-  console.log(tradesData)
-  const filteredDate=QueryDates({fromD,toD,tradesData});
-  console.log(filteredDate);
+export const NetPnL = async ({ fromD, toD }) => {
+  const filteredDate = await GetFilteredProfitLoss({ fromD, toD });
   if (filteredDate) {
+    //algo to calculate Net profit and loss
     let netProfitLoss = 0;
     filteredDate.forEach((trade) => {
-      const profitLoss =
-         trade.sell_amount -  trade.buy_amount;
+      const profitLoss = trade.sell_amount - trade.buy_amount;
       netProfitLoss += profitLoss;
     });
-    // console.log("Net profit/loss:", netProfitLoss);
     const rounded = netProfitLoss.toFixed(2);
     console.log(rounded);
     return rounded;
@@ -24,18 +20,18 @@ export const NetPnL = async ({fromD,toD}) => {
     return null;
   }
 };
-export const TradeWin = async ({fromD,toD}) => {
-  const tradesData = await ProfitLoss({fromD,toD});
-  if (tradesData) {
+export const TradeWin = async ({ fromD, toD }) => {
+  const filteredDate = await GetFilteredProfitLoss({ fromD, toD });
+  if (filteredDate) {
+    //to calculate tradewin percentage
     let profitableTradesCount = 0;
-
-    for (const trade of tradesData) {
+    for (const trade of filteredDate) {
       const profitLoss = trade.sell_amount - trade.buy_amount;
       if (profitLoss > 0) {
         profitableTradesCount++;
       }
     }
-    const totalTrades = tradesData.length;
+    const totalTrades = filteredDate.length;
     const winPercentage = (profitableTradesCount / totalTrades) * 100;
     console.log(winPercentage);
     return winPercentage.toFixed(2);
@@ -44,13 +40,13 @@ export const TradeWin = async ({fromD,toD}) => {
     return null;
   }
 };
-export const ProfitFactor = async ({fromD,toD}) => {
-  const tradesData = await ProfitLoss({fromD,toD});
-  if (tradesData) {
+export const ProfitFactor = async ({ fromD, toD }) => {
+  const filteredDate = await GetFilteredProfitLoss({ fromD, toD });
+  if (filteredDate) {
     let totalProfit = 0;
     let totalLoss = 0;
 
-    for (const trade of tradesData) {
+    for (const trade of filteredDate) {
       const profitLoss = trade.sell_amount - trade.buy_amount;
       if (profitLoss > 0) {
         totalProfit += profitLoss;
@@ -71,15 +67,15 @@ export const ProfitFactor = async ({fromD,toD}) => {
     return null;
   }
 };
-export const AverageWinLossTrade = async ({fromD,toD}) => {
-  const tradesData = await ProfitLoss({fromD,toD});
-  if (tradesData) {
+export const AverageWinLossTrade = async ({ fromD, toD }) => {
+  const filteredDate = await GetFilteredProfitLoss({ fromD, toD });
+  if (filteredDate) {
     let totalProfit = 0;
     let totalLoss = 0;
     let totalWinQuantity = 0;
     let totalLossQuantity = 0;
 
-    for (const trade of tradesData) {
+    for (const trade of filteredDate) {
       const profitLoss =
         (trade.sell_average - trade.buy_average) * trade.quantity;
       if (profitLoss > 0) {
@@ -103,14 +99,10 @@ export const AverageWinLossTrade = async ({fromD,toD}) => {
     return null;
   }
 };
-export const DailyPnL = async ({fromD,toD}) => {
-  const tradesData = await ProfitLoss({fromD,toD});
-  console.log("----------------Profit Losss in sorted order------------");
-
-  // console.log(tradesData);
+export const DailyPnL = async ({ fromD, toD }) => {
+  const tradesData = await GetFilteredProfitLoss({ fromD, toD });
   if (tradesData) {
     const dailyProfitLoss = {};
-
     // Iterate through trades and calculate profit/loss for each date
     tradesData.forEach((trade) => {
       const date = trade.buy_date;
@@ -127,16 +119,24 @@ export const DailyPnL = async ({fromD,toD}) => {
       date,
       profitLoss: dailyProfitLoss[date],
     }));
+    var maxProfit = 0,
+      maxLoss = 999999999;
+    Object.keys(dailyProfitLoss).map((date) => {
+      maxProfit = Math.max(maxProfit, dailyProfitLoss[date]);
+      maxLoss = Math.min(maxLoss, dailyProfitLoss[date]);
+    });
+    console.log(maxProfit);
+    console.log(maxLoss);
     // console.log(result);
-    return result;
+    return {result,maxProfit,maxLoss};
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
     return null;
   }
 };
 
-export const CummulativePnL = async ({fromD,toD}) => {
-  const tradesData = await ProfitLoss({fromD,toD});
+export const CummulativePnL = async ({ fromD, toD }) => {
+  const tradesData = await GetFilteredProfitLoss({ fromD, toD });
   const dailyProfitLoss = {};
 
   // Iterate through trades and calculate profit/loss for each date
@@ -153,15 +153,10 @@ export const CummulativePnL = async ({fromD,toD}) => {
 
     const result = [];
     let cumulativeProfitLoss = 0;
-    // console.log(dailyProfitLoss);
-    Object.keys(dailyProfitLoss)
-    .forEach((date) => {
-      // console.log(date);
+    Object.keys(dailyProfitLoss).forEach((date) => {
       cumulativeProfitLoss += dailyProfitLoss[date];
       result.push({ date, cumulativeProfitLoss });
     });
-    console.log("-----------------CummulativePnL---------------------");
-    // console.log(result);
     return result;
   } else {
     console.log("Failed to fetch trades data. Check console for error.");

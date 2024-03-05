@@ -18,7 +18,6 @@ import { Typography } from "@mui/material";
 interface Props {
   children?: ReactNode;
   title: string;
-  // any props that come into the component
 }
 const Home = async () => {
   return (

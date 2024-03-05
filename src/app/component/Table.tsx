@@ -10,15 +10,19 @@ export function DefaultTable() {
   useEffect(() => {
     const getPositions = async () => {
       const res = await Positions();
-      const dummy = res.map(
-        (item: { pnl: any; tradingsymbol: any; value: any,quantity:any, }) => ({
-          PnL: item.pnl,
-          Symbol: item.tradingsymbol,
-          value: item.value,
-          quantity:item.quantity,
-        })
-      );
-      setData(dummy);
+      if(res)
+      {
+        const dummy = res.map(
+          (item: { pnl: any; tradingsymbol: any; value: any,quantity:any, }) => ({
+            PnL: item.pnl,
+            Symbol: item.tradingsymbol,
+            value: item.value,
+            quantity:item.quantity,
+          })
+        );
+        setData(dummy);
+
+      }
     };
     getPositions();
   }, []);

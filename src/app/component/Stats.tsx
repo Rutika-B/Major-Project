@@ -1,28 +1,51 @@
+'use client';
+import { DailyPnL } from "@/Math/NetProfitLoss";
+import { tradeCharges } from "@/api/upstoxData";
+import { RootState } from "@/store/store";
 import { Typography } from "@mui/material";
-import React from "react";
-const stats = [
-  {
-    id: 1,
-    title: "Big Win",
-    value: 7657,
-  },
-  {
-    id: 1,
-    title: "Big loss",
-    value: 354,
-  },
-  {
-    id: 1,
-    title: "Total Fees",
-    value: 889,
-  },
-  {
-    id: 1,
-    title: "Best Day",
-    value: "Tuesday",
-  },
-];
+import React, { useState,useEffect } from "react";
+import { useSelector } from "react-redux";
+
+
 function Stats() {
+  const Range = useSelector((state: RootState) => state.reducer.dateRange);
+  const fromD = Range.fromDate;
+  const toD = Range.toDate;
+  
+  const [win, setWin] = useState<number|undefined>(0);
+  const [loss, setLoss] = useState<number|undefined>(0);
+  const [charge,setcharge]=useState<number|undefined>(0);
+  
+  useEffect(() => {
+    const getStats = async () => {
+      const Data = await DailyPnL({ fromD, toD });
+      const mxWin = Data?.maxProfit;
+      const mxloss = Data?.maxLoss;
+      const charges=await tradeCharges({fromD,toD});
+      setWin(mxWin);
+      setLoss(mxloss);
+      setcharge(charges);
+    };
+    getStats();
+  }, [fromD, toD]);
+
+  const stats = [
+    {
+      id: 1,
+      title: "Big Win",
+      value: win,
+    },
+    {
+      id: 1,
+      title: "Big loss",
+      value: loss,
+    },
+    {
+      id: 1,
+      title: "Total Fees",
+      value: charge,
+    },
+  ];
   return (
     <div className="flex flex-col items-center w-1/6 justify-center m-2 px-2 border rounded-md bg-white border-gray-500">
       <Typography className="my-2 pt-3" variant="h4">

@@ -19,7 +19,9 @@ interface SideBarProps {
   session: Session | null;
 }
 const SideBar: React.FC<SideBarProps> = ({ session }) => {
-  const toggleSide = useSelector((state: RootState) => state.reducer.toggleSide.value);
+  const toggleSide = useSelector(
+    (state: RootState) => state.reducer.toggleSide.value
+  );
   const dispatch = useDispatch();
 
   const menus = [
@@ -40,7 +42,6 @@ const SideBar: React.FC<SideBarProps> = ({ session }) => {
     { title: "Insights", micon: <FaExclamation />, id: 5, path: "/insights" },
     { title: "Notebook", micon: <PiNotebookFill />, id: 6, path: "/notebook" },
   ];
-  //   const [open, setOpen] = useState(true);
   if (session) {
     return (
       <div className="relative">
@@ -51,7 +52,6 @@ const SideBar: React.FC<SideBarProps> = ({ session }) => {
         >
           <BsArrowLeft
             onClick={() => {
-              // setOpen(!open);
               dispatch(change(toggleSide));
             }}
             className={`bg-white text-dark-purple text-3xl rounded-full absolute -right-3 border p-1 border-dark-purple cursor-pointer ${

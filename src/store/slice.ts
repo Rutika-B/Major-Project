@@ -1,20 +1,18 @@
 import { createSlice, combineReducers } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-// export interface CounterState {
-//   value: number;
-// }
+
 export interface ToggleState {
   value: Boolean;
 }
+const initialState: ToggleState = {
+  value: false,
+};
+
 export interface dateRangeState {
   fromDate: string;
   toDate: string;
 }
-
-const initialState: ToggleState = {
-  value: false,
-};
 const initialRange: dateRangeState = {
   fromDate: "26-08-2021",
   toDate: "01-09-2021",
@@ -44,7 +42,6 @@ export const rangeSlice = createSlice({
       },
   },
 });
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 export const { change } = ToggleSlice.actions;
 export const { selectedRange } = rangeSlice.actions;
 const rootReducer = combineReducers({

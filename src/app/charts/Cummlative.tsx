@@ -32,17 +32,14 @@ const Cummulative = () => {
   useEffect(() => {
     const getData = async () => {
       const dummyData = await CummulativePnL({fromD,toD});
-      const filteredDate=QueryDates({fromD,toD,dummyData});
-      console.log(filteredDate);
       if (dummyData) {
-        const transformedData = filteredDate.map(
+        const transformedData = dummyData.map(
           (item: { date: string; cumulativeProfitLoss: any }) => ({
             name: item.date, // Date from API response will be mapped to name in the chart
             uv: item.cumulativeProfitLoss, // ProfitLoss from API response will be mapped to uv in the chart
           })
         );
         setData(transformedData);
-        console.log(transformedData);
         const gradientOffset = () => {
           const dataMax = Math.max(
             ...transformedData.map((i: { uv: any }) => i.uv)
@@ -66,16 +63,12 @@ const Cummulative = () => {
       }
     };
     getData();
-    // const dummyOffset = 0.67;
-    // setOff(dummyOffset);
   }, [fromD,toD]);
   if (!data) {
     return <div>Loading your trading graph...</div>;
   }
   return (
     <>
-      
-      
       <ResponsiveContainer width="100%" height="90%" className="bg-white mx-2">
         <LineChart
           width={500}

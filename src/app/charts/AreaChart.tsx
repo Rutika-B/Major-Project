@@ -22,31 +22,24 @@ interface DataItem {
 }
 const Example = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
-  const [off, setOff] = useState(0.67);
+  const [off, setOff] = useState(0.67);//upward and downward graph separator
   const Range = useSelector((state: RootState) => state.reducer.dateRange);
   const fromD = Range.fromDate;
   const toD = Range.toDate;
 
   useEffect(() => {
     const getData = async () => {
-      await ReportMetaData();
-      const dummyData = await DailyPnL({ fromD, toD });
-      const charges = await tradeCharges({ fromD, toD });
-      console.log(charges);
-      console.log(dummyData);
-
-      //Function to parse dd-mm-yyyy date to yyyy-mm-dd format
-      const filteredDate=QueryDates({fromD,toD,dummyData});
-      console.log(filteredDate);
-      if (filteredDate) {
-        const transformedData = filteredDate.map(
+      await tradeCharges({fromD,toD});
+      const Data = await DailyPnL({ fromD, toD });   
+      const dummyData=Data?.result;
+      if (dummyData) {
+        const transformedData = dummyData.map(
           (item: { date: string; profitLoss: any }) => ({
             name: item.date, // Date from API response will be mapped to name in the chart
             uv: item.profitLoss, // ProfitLoss from API response will be mapped to uv in the chart
           })
         );
         setData(transformedData);
-        console.log(transformedData);
         const gradientOffset = () => {
           const dataMax = Math.max(
             ...transformedData.map((i: { uv: any }) => i.uv)
@@ -70,8 +63,6 @@ const Example = () => {
       }
     };
     getData();
-    // const dummyOffset = 0.67;
-    // setOff(dummyOffset);
   }, [fromD, toD]);
   if (!data) {
     return <div>Loading your trading graph...</div>;

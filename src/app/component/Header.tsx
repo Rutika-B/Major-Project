@@ -24,15 +24,13 @@ const Header: React.FC<SideBarProps> = ({ session }) => {
   const dispatch = useDispatch();
 
   const handleDateRangeChange = (value: any) => {
-    console.log("Selected Date Range: ", value);
     setDateRange(value);
   };
   if (dateRange[0]) {
-    const fromDate = FormatDate(dateRange[0]);
+    const fromDate = FormatDate(dateRange[0]); //format date object to dd-mm-yyyy
     const toDate = FormatDate(dateRange[1]);
-    const payload = { fromDate: fromDate, toDate: toDate };
+    const payload = { fromDate: fromDate, toDate: toDate }; //store dateRange
     dispatch(selectedRange(payload));
-    
   }
 
   const handleSignOut = async () => {
@@ -45,8 +43,6 @@ const Header: React.FC<SideBarProps> = ({ session }) => {
           toggleSide ? "w-[80%] ml-[20%] " : "w-[94%] ml-[6%] "
         }duration-300 flex justify-between  h-14 bg-gray-100 `}
       >
-        {/* <h1 className="text-xl font">Dashboard</h1>
-        {/* <h1>Hello Rutika!</h1> */}
         <div className="navbar ">
           <div className="flex-1">
             <a className="btn btn-ghost text-xl">Dashboard</a>
