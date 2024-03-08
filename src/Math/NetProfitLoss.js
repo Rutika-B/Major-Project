@@ -1,5 +1,5 @@
 import { Filter } from "@/Filter/AscendingDate";
-import { ProfitLoss } from "@/api/upstoxData";
+import { ProfitLoss,CalendarProfitLoss } from "@/api/upstoxData";
 import { QueryDates } from "@/Filter/QueryDate";
 import { GetFilteredProfitLoss } from "@/Filter/getFilteredProfitLoss";
 
@@ -127,8 +127,78 @@ export const DailyPnL = async ({ fromD, toD }) => {
     });
     console.log(maxProfit);
     console.log(maxLoss);
-    // console.log(result);
-    return {result,maxProfit,maxLoss};
+    console.log(result);
+    return { result, maxProfit, maxLoss };
+  } else {
+    console.log("Failed to fetch trades data. Check console for error.");
+    return null;
+  }
+};
+export const Dailydetails = async ({ fromD, toD }) => {
+  console.log(fromD)
+  const tradesData = await CalendarProfitLoss({ fromD, toD });
+  console.log(tradesData)
+  if (tradesData) {
+    const dailyData = {};
+    const dailyDetail = {};
+
+    tradesData.forEach((trade) => {
+      const date = trade.buy_date;
+      const instrument = trade.scrip_name;
+
+      const profitLoss = trade.sell_amount - trade.buy_amount;
+      if (!dailyDetail[date]) {
+        dailyDetail[date] = {};
+      }
+
+      if (!dailyDetail[date][instrument]) {
+        dailyDetail[date][instrument] = {
+          volume: trade.quantity,
+          PnL: profitLoss,
+          status: profitLoss > 0 ? 1 : 0,
+          invested: trade.buy_amount,
+        };
+      } else {
+        dailyDetail[date][instrument].volume += trade.quantity;
+        dailyDetail[date][instrument].PnL += profitLoss;
+        dailyDetail[date][instrument].invested += trade.buy_amount;
+        const status = dailyDetail[date][instrument].PnL;
+        dailyDetail[date][instrument].status = status > 0 ? 1 : 0;
+      }
+    });
+
+    const mySet = new Set();
+    tradesData.forEach((trade) => {
+      const date = trade.buy_date;
+      const profitLoss = trade.sell_amount - trade.buy_amount;
+      const instrument = trade.scrip_name;
+      const total_trades = Object.keys(dailyDetail[date]).length;
+      var status = 0;
+      if (mySet.has(instrument) === false) {
+        status = dailyDetail[date][instrument].status;
+      }
+      if (!dailyData[date]) {
+        mySet.add(instrument);
+        dailyData[date] = {
+          PnL: profitLoss,
+          volume: trade.quantity,
+          trade_count: total_trades,
+          winners: status,
+        };
+      } else {
+        mySet.add(instrument);
+        dailyData[date].PnL += profitLoss;
+        dailyData[date].volume += trade.quantity;
+        dailyData[date].winners += status;
+      }
+    });
+    const calendarData = Object.entries(dailyData).map(([date, data]) => ({
+      date,
+      ...data
+    }));
+    // console.log(arr)
+    console.log(calendarData)
+    return { calendarData, dailyDetail };
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
     return null;

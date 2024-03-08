@@ -1,5 +1,5 @@
 "use client";
-import { DailyPnL } from "@/Math/NetProfitLoss";
+import { DailyPnL, Dailydetails } from "@/Math/NetProfitLoss";
 import React, { useState, useEffect } from "react";
 import {
   ResponsiveContainer,
@@ -14,7 +14,7 @@ import Loader from "../component/Loader/Loader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { QueryDates } from "@/Filter/QueryDate";
-import { ReportMetaData, tradeCharges } from "@/api/upstoxData";
+import { Holdings, ReportMetaData, tradeCharges } from "@/api/upstoxData";
 
 interface DataItem {
   date: string;
@@ -29,7 +29,7 @@ const Example = () => {
 
   useEffect(() => {
     const getData = async () => {
-      await tradeCharges({fromD,toD});
+      await Holdings();
       const Data = await DailyPnL({ fromD, toD });   
       const dummyData=Data?.result;
       if (dummyData) {
