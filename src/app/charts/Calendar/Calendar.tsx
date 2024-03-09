@@ -11,61 +11,54 @@ import { AreaChart } from "recharts";
 import ProgressDemo from "../Progress";
 import { Dailydetails } from "@/Math/NetProfitLoss";
 import FormatDate from "@/Formatting/DateFormat";
+import Cell from "./Cell";
 
 function getViewList(
   date: { getDate: () => any },
-  dailyData: any[] | undefined
+  dailyData: any[] | undefined,
+  exploreCell: any[] | undefined
 ) {
   const key = FormatDate(date);
-  const result = dailyData?.filter((item) => {
+  const list1 = dailyData?.filter((item) => {
     return item.date === key;
   });
-  return result;
+  const list2=exploreCell?.filter((item)=>{
+    return item[key];
+  })
+  return {list1,list2};
 }
 
 const App = () => {
   const currentDate = new Date();
-  const currentYear = (currentDate.getFullYear());
+  const currentYear = currentDate.getFullYear();
 
   const [fromD, setfrom] = useState(currentYear);
   const [toD, setto] = useState(currentYear);
+
   const [dailyData, setdailydata] = useState<any[] | undefined>([]);
+  const [exploreCell, setExplore] = useState<any[] | undefined>([]);
+
   useEffect(() => {
     const getData = async () => {
       const data = await Dailydetails({ fromD, toD });
       setdailydata(data?.calendarData);
+      setExplore(data?.dataArray);
     };
     getData();
   }, [fromD, toD]);
   function renderCell(date: { getDate: () => any }) {
-    const displayList = getViewList(date, dailyData);
+    const Data = getViewList(date, dailyData, exploreCell);
+    const displayList=Data.list1;
+    const chartTable=Data.list2;
     if (displayList?.length) {
       const moreItem = (
         <li>
           <Whisper
             placement="top"
-            trigger="hover"
+            trigger="click"
             speaker={
               <Popover>
-                <div className="flex flex-col">
-                  <div className="flex-row">
-                    <Typography variant="h4">Thu, Jun 11, 2022</Typography>
-                    <Typography variant="h5" className="text-red-400">
-                      | Net P&L Rs. 789
-                    </Typography>
-                  </div>
-                  <div className="flex-row m-3 p-2">
-                    <ProgressDemo />
-                    <div className="">
-                      <p>Total Trades 4</p>
-                      <p>Total volume 12</p>
-                      <p>Winrate 12</p>
-                      <p>Profit Factor 12</p>
-                      <p>Winners 12</p>
-                      <p>Commissions 12</p>
-                    </div>
-                  </div>
-                </div>
+                <Cell displayList={displayList} chartTable={chartTable}/>
               </Popover>
             }
           >
@@ -90,8 +83,8 @@ const App = () => {
   const handleDateRangeChange = (value: any) => {
     const date = new Date(value);
     const year = date.getFullYear();
-    setfrom((year));
-    setto((year));
+    setfrom(year);
+    setto(year);
   };
   return (
     <div className="w-2/3 mx-2 my-4 bg-white">

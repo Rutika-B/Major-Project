@@ -1,5 +1,5 @@
 import { Filter } from "@/Filter/AscendingDate";
-import { ProfitLoss,CalendarProfitLoss } from "@/api/upstoxData";
+import { ProfitLoss, CalendarProfitLoss } from "@/api/upstoxData";
 import { QueryDates } from "@/Filter/QueryDate";
 import { GetFilteredProfitLoss } from "@/Filter/getFilteredProfitLoss";
 
@@ -135,9 +135,9 @@ export const DailyPnL = async ({ fromD, toD }) => {
   }
 };
 export const Dailydetails = async ({ fromD, toD }) => {
-  console.log(fromD)
+  console.log(fromD);
   const tradesData = await CalendarProfitLoss({ fromD, toD });
-  console.log(tradesData)
+  console.log(tradesData);
   if (tradesData) {
     const dailyData = {};
     const dailyDetail = {};
@@ -194,11 +194,53 @@ export const Dailydetails = async ({ fromD, toD }) => {
     });
     const calendarData = Object.entries(dailyData).map(([date, data]) => ({
       date,
-      ...data
+      ...data,
     }));
-    // console.log(arr)
-    console.log(calendarData)
-    return { calendarData, dailyDetail };
+    console.log(dailyDetail);
+
+    const dataArray = [];
+
+    for (const date in dailyDetail) {
+      if (Object.hasOwnProperty.call(dailyDetail, date)) {
+        const instruments = [];
+        const innerData = dailyDetail[date];
+        for (const key in innerData) {
+          if (Object.hasOwnProperty.call(innerData, key)) {
+            const instrumentData = innerData[key];
+            instruments.push({ instrument: key, ...instrumentData });
+          }
+        }
+        dataArray.push({ [date]: instruments });
+      }
+    }
+
+    console.log(dataArray);
+    // const dataArray = [];
+
+    // for (const date in dailyDetail) {
+    //   if (Object.hasOwnProperty.call(dailyDetail, date)) {
+    //     const innerData = dailyDetail[date];
+    //     const formattedDate = date.split("-").join("/");
+    //     const dateDataArray = [];
+
+    //     for (const instrument in innerData) {
+    //       if (Object.hasOwnProperty.call(innerData, instrument)) {
+    //         const instrumentData = innerData[instrument];
+    //         dateDataArray.push({
+    //           instrument: instrument,
+    //           volume: instrumentData.volume,
+    //           PnL: instrumentData.PnL,
+    //           status: instrumentData.status,
+    //           invested: instrumentData.invested,
+    //         });
+    //       }
+    //     }
+
+    //     dataArray.push({ date: formattedDate, data: dateDataArray });
+    //   }
+    // }
+    // console.log(dataArray);
+    return { calendarData, dataArray };
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
     return null;
