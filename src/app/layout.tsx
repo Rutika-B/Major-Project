@@ -37,7 +37,7 @@ export default async function RootLayout({
           <div className="flex">
             <SideBar session={session} />
             <Header session={session} />
-            <Allchildren>{children}</Allchildren>
+            <Allchildren session={session}>{children}</Allchildren>
             {/* <CustomProvider>{children}</CustomProvider> */}
           </div>
         </StoreProvider>

@@ -16,7 +16,7 @@ import { change } from "@/store/slice";
 import Link from "next/link";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 interface SideBarProps {
-  session: Session | null;
+  session: any | null;
 }
 const SideBar: React.FC<SideBarProps> = ({ session }) => {
   const toggleSide = useSelector(

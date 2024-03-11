@@ -34,6 +34,7 @@ const App = () => {
 
   const [fromD, setfrom] = useState(currentYear);
   const [toD, setto] = useState(currentYear);
+  const [open, setOpen] = React.useState(false);
 
   const [dailyData, setdailydata] = useState<any[] | undefined>([]);
   const [exploreCell, setExplore] = useState<any[] | undefined>([]);
@@ -46,23 +47,26 @@ const App = () => {
     };
     getData();
   }, [fromD, toD]);
+  
   function renderCell(date: { getDate: () => any }) {
     const Data = getViewList(date, dailyData, exploreCell);
     const displayList=Data.list1;
     const chartTable=Data.list2;
+    const handleOpen = () => setOpen(!open);
     if (displayList?.length) {
       const moreItem = (
         <li>
           <Whisper
             placement="top"
             trigger="click"
+            onClick={handleOpen}
             speaker={
               <Popover>
-                <Cell displayList={displayList} chartTable={chartTable}/>
+                <Cell  handleOpen={handleOpen} displayList={displayList} open={open} chartTable={chartTable}/>
               </Popover>
             }
           >
-            <a>Explore</a>
+            <a onClick={handleOpen}>Explore</a>
           </Whisper>
         </li>
       );

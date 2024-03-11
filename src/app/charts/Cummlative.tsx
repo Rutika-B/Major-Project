@@ -23,6 +23,7 @@ interface DataItem {
 }
 const Cummulative = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
+  const [Loading,setLoading]=useState(false);
   const [off, setOff] = useState(0.67);
   const Range = useSelector(
     (state: RootState) => state.reducer.dateRange
@@ -31,6 +32,7 @@ const Cummulative = () => {
   const toD=Range.toDate;
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       const dummyData = await CummulativePnL({fromD,toD});
       if (dummyData) {
         const transformedData = dummyData.map(
@@ -60,11 +62,12 @@ const Cummulative = () => {
 
         const off = gradientOffset();
         setOff(off);
+        setLoading(false)
       }
     };
     getData();
   }, [fromD,toD]);
-  if (!data) {
+  if (Loading) {
     return <div>Loading your trading graph...</div>;
   }
   return (

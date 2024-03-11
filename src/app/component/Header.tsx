@@ -10,7 +10,7 @@ import { selectedRange } from "@/store/slice";
 const { allowedMaxDays } = DateRangePicker;
 
 interface SideBarProps {
-  session: Session | null;
+  session: any | null;
 }
 interface Database {
   Database: any;
@@ -36,6 +36,7 @@ const Header: React.FC<SideBarProps> = ({ session }) => {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
+  
   if (session) {
     return (
       <div

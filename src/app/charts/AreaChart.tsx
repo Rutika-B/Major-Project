@@ -14,7 +14,6 @@ import Loader from "../component/Loader/Loader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { QueryDates } from "@/Filter/QueryDate";
-import { Holdings, ReportMetaData, tradeCharges } from "@/api/upstoxData";
 
 interface DataItem {
   date: string;
@@ -29,23 +28,23 @@ const Example = () => {
 
   useEffect(() => {
     const getData = async () => {
-      await Holdings();
       const Data = await DailyPnL({ fromD, toD });   
       const dummyData=Data?.result;
       if (dummyData) {
         const transformedData = dummyData.map(
           (item: { date: string; profitLoss: any }) => ({
             name: item.date, // Date from API response will be mapped to name in the chart
-            uv: item.profitLoss, // ProfitLoss from API response will be mapped to uv in the chart
+            amount: item.profitLoss, // ProfitLoss from API response will be mapped to amount in the chart
           })
         );
         setData(transformedData);
+        console.log(transformedData)
         const gradientOffset = () => {
           const dataMax = Math.max(
-            ...transformedData.map((i: { uv: any }) => i.uv)
+            ...transformedData.map((i: { amount: any }) => i.amount)
           );
           const dataMin = Math.min(
-            ...transformedData.map((i: { uv: any }) => i.uv)
+            ...transformedData.map((i: { amount: any }) => i.amount)
           );
 
           if (dataMax <= 0) {
@@ -93,7 +92,7 @@ const Example = () => {
           </defs>
           <Area
             type="monotone"
-            dataKey="uv"
+            dataKey="amount"
             stroke="#000"
             fill="url(#splitColor)"
           />

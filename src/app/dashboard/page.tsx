@@ -2,12 +2,6 @@ import { DailyPnL } from "@/Math/NetProfitLoss";
 import Example from "../charts/AreaChart";
 import HalfCircle from "../charts/HalfCircle";
 import HeroCard from "../component/Herocard";
-import {
-  BrokerageDetails,
-  Holdings,
-  Positions,
-  ProfitLoss,
-} from "@/api/upstoxData";
 
 import App from "../charts/Calendar/Calendar";
 import { ReactNode } from "react";
@@ -44,7 +38,7 @@ const Home = async () => {
         <div className="flex flex-row items-start">
           <div className="w-2/5">
             <Typography variant="h5">Open Positions</Typography>
-          <DefaultTable />
+            <DefaultTable />
           </div>
           <App />
         </div>
