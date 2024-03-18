@@ -9,12 +9,14 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import DailyChart from "../Dailychart";
+import { DefaultTable } from "@/app/component/Table";
 interface CellProps {
   displayList: any;
   chartTable: any;
   handleOpen: any;
   open: boolean;
 }
+
 const Cell: React.FC<CellProps> = ({
   displayList,
   chartTable,
@@ -23,9 +25,20 @@ const Cell: React.FC<CellProps> = ({
 }) => {
   console.log(displayList);
   console.log(chartTable);
-  const title = DdtoDate(displayList[0].date);
+  const date = displayList[0].date;
+  const title = DdtoDate(date);
   const data = displayList[0];
 
+  const columns = ["instrument", "PnL", "ROI", "volume"];
+  const TabData = chartTable[0][`${date}`].map(
+    (item: { PnL: any; instrument: any; volume: any; invested: any }) => ({
+      instrument: item.instrument,
+      PnL: item.PnL,
+      ROI: ((item.PnL / item.invested) * 100).toFixed(2),
+      volume: item.volume,
+    })
+  );
+  console.log(TabData);
   return (
     <>
       <Dialog open={open} handler={handleOpen} size="xl">
@@ -48,28 +61,33 @@ const Cell: React.FC<CellProps> = ({
             </div>
             <div className="grid grid-cols-4 gap-8">
               <div className="px-4 items-center">
-                <div>Total Trades
-
-                <span className="font-bold inline">{data.trade_count}</span>
+                <div>
+                  Total Trades
+                  <span className="px-4 font-bold inline">{data.trade_count}</span>
                 </div>
               </div>
               <div className="px-4 items-center">
                 <div>Volume</div>
-                <div className="font-bold">{data.volume}</div>
+                <span className="px-4 font-bold inline">{data.volume}</span>
               </div>
               <div className="px-4 items-center">
                 <div>Gross Profit</div>
-                <div className="font-bold">{data.PnL}</div>
+                <span className="px-4 font-bold inline">{data.PnL}</span>
               </div>
               <div className="px-4 items-center">
                 <div>Winners</div>
-                <div className="font-bold">{data.winners}</div>
+                <span className="px-4 font-bold inline">{data.winners}</span>
               </div>
               <div className="px-4 items-center">
                 <div>Lossers</div>
-                <div className="font-bold">{data.trade_count-data.winners}</div>
+                <span className="px-4 font-bold inline">
+                  {data.trade_count - data.winners}
+                </span>
               </div>
             </div>
+          </div>
+          <div>
+            <DefaultTable columns={columns} Tabdata={TabData} />
           </div>
         </DialogBody>
         <DialogFooter>

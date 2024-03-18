@@ -9,6 +9,7 @@ import Stats from "../component/Stats";
 import Cummulative from "../charts/Cummlative";
 import { DefaultTable } from "../component/Table";
 import { Typography } from "@mui/material";
+import OpenPos from "./openPos";
 interface Props {
   children?: ReactNode;
   title: string;
@@ -38,7 +39,7 @@ const Home = async () => {
         <div className="flex flex-row items-start">
           <div className="w-2/5">
             <Typography variant="h5">Open Positions</Typography>
-            <DefaultTable />
+            <OpenPos />
           </div>
           <App />
         </div>
