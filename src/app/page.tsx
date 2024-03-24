@@ -16,11 +16,11 @@ const page = async () => {
     data: { session },
   } = await supabase.auth.getSession();
   if (session) {
-    redirect("/dashboard");
+    // redirect("/brokers");
+    redirect('https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=88b1eb14-832c-4328-917b-9094278ec0ef&redirect_uri=http://localhost:3000/api/auth/callback/upstox');
   }
   return (
     <div>
-      {/* <h1>no user</h1> */}
       <div>
         <Navebar />
 

@@ -28,7 +28,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createServerComponentClient<Database>({ cookies });
+   const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -44,6 +44,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <StoreProvider>
+             
               <div className="flex">
                 <SideBar session={session} />
                 <Header session={session} />
