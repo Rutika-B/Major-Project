@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
   await supabase.auth.signInWithPassword({
     email,
     password,
+    
   });
   return NextResponse.redirect(url.origin, {
     status: 301,

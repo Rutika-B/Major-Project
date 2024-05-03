@@ -1,5 +1,5 @@
 "use client";
-import { ProfitLoss } from "@/api/upstoxData";
+import { DailyPnL } from "@/Math/NetProfitLoss";
 import { RootState } from "@/store/store";
 import { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
@@ -8,16 +8,17 @@ import { useSelector } from "react-redux";
 
 const HalfCircle = () => {
   const [val, setval] = useState<any | number>(13);
-  const Range = useSelector(
-    (state: RootState) => state.reducer.dateRange
-  );
-  const fromD=Range.fromDate;
-  const toD=Range.toDate;
+  const Range = useSelector((state: RootState) => state.reducer.dateRange);
+  const fromD = Range.fromDate;
+  const toD = Range.toDate;
 
   useEffect(() => {
-    const data = ProfitLoss({fromD,toD});
-    setval(data);
-  }, [fromD,toD]);
+    const getData = async () => {
+      const Data = await DailyPnL({ fromD, toD });
+      setval(Data);
+    };
+    getData();
+  }, [fromD, toD]);
 
   const [state, setState] = useState({
     series: [val],

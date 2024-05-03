@@ -1,7 +1,11 @@
 import { Filter } from "@/Filter/AscendingDate";
-import { ProfitLoss, CalendarProfitLoss } from "@/api/upstoxData";
+import {
+  ProfitLoss,
+  CalendarProfitLoss,
+} from "../app/api/UpstoxAPIs/upstoxData";
 import { QueryDates } from "@/Filter/QueryDate";
 import { GetFilteredProfitLoss } from "@/Filter/getFilteredProfitLoss";
+import axios from "axios";
 
 export const NetPnL = async ({ fromD, toD }) => {
   const filteredDate = await GetFilteredProfitLoss({ fromD, toD });
@@ -13,7 +17,6 @@ export const NetPnL = async ({ fromD, toD }) => {
       netProfitLoss += profitLoss;
     });
     const rounded = netProfitLoss.toFixed(2);
-    console.log(rounded);
     return rounded;
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
@@ -33,7 +36,6 @@ export const TradeWin = async ({ fromD, toD }) => {
     }
     const totalTrades = filteredDate.length;
     const winPercentage = (profitableTradesCount / totalTrades) * 100;
-    console.log(winPercentage);
     return winPercentage.toFixed(2);
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
@@ -60,7 +62,6 @@ export const ProfitFactor = async ({ fromD, toD }) => {
     }
 
     const profitFactor = totalProfit / totalLoss;
-    console.log(profitFactor.toFixed(2));
     return profitFactor.toFixed(2);
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
@@ -92,7 +93,6 @@ export const AverageWinLossTrade = async ({ fromD, toD }) => {
     const averageLoss =
       totalLossQuantity > 0 ? (totalLoss / totalLossQuantity).toFixed(2) : 0;
     const ratio = (averageWin / averageLoss).toFixed(2);
-    console.log(ratio);
     return ratio;
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
@@ -125,9 +125,6 @@ export const DailyPnL = async ({ fromD, toD }) => {
       maxProfit = Math.max(maxProfit, dailyProfitLoss[date]);
       maxLoss = Math.min(maxLoss, dailyProfitLoss[date]);
     });
-    console.log(maxProfit);
-    console.log(maxLoss);
-    console.log(result);
     return { result, maxProfit, maxLoss };
   } else {
     console.log("Failed to fetch trades data. Check console for error.");
@@ -135,9 +132,12 @@ export const DailyPnL = async ({ fromD, toD }) => {
   }
 };
 export const Dailydetails = async ({ fromD, toD }) => {
-  console.log(fromD);
-  const tradesData = await CalendarProfitLoss({ fromD, toD });
-  console.log(tradesData);
+  const payload = {
+    fromD,
+    toD,
+  };
+  const res = await axios.post("/api/calendar-pnl", payload);
+  const tradesData = res.data;
   if (tradesData) {
     const dailyData = {};
     const dailyDetail = {};

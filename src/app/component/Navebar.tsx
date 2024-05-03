@@ -34,7 +34,7 @@ export const Navebar = () => {
     </ul>
   </div>
   <div className="navbar-end">
-    <a className="btn hover:no-underline">Sign In</a>
+    <Link href={"/signup"} className="btn hover:no-underline">Sign In</Link>
   </div>
 </div>
     </>

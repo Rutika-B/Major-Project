@@ -1,10 +1,11 @@
 'use client';
 import { DailyPnL } from "@/Math/NetProfitLoss";
-import { tradeCharges } from "@/api/upstoxData";
+import { tradeCharges } from "../api/UpstoxAPIs/upstoxData";
 import { RootState } from "@/store/store";
 import { Typography } from "@mui/material";
 import React, { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 
 function Stats() {
@@ -14,16 +15,23 @@ function Stats() {
   
   const [win, setWin] = useState<number|undefined>(0);
   const [loss, setLoss] = useState<number|undefined>(0);
-  const [charge,setcharge]=useState<number|undefined>(0);
+  const [charge,setcharge]=useState<any|undefined>(0);
   
   useEffect(() => {
     const getStats = async () => {
       const Data = await DailyPnL({ fromD, toD });
       const mxWin = Data?.maxProfit;
       const mxloss = Data?.maxLoss;
-      const charges=await tradeCharges({fromD,toD});
       setWin(mxWin);
       setLoss(mxloss);
+      // const charges=await tradeCharges({fromD,toD});
+      const payload = {
+        fromD,
+        toD,
+      };
+      const res=await axios.post("/api/tradecharges", payload);
+      const charges=res.data
+      // console.log(res);
       setcharge(charges);
     };
     getStats();

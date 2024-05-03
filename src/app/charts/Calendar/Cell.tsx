@@ -1,5 +1,6 @@
+
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import DdtoDate from "@/Formatting/reverseFormat";
 import {
   Button,
@@ -10,6 +11,7 @@ import {
 } from "@material-tailwind/react";
 import DailyChart from "../Dailychart";
 import { DefaultTable } from "@/app/component/Table";
+import Note from "./Note";
 interface CellProps {
   displayList: any;
   chartTable: any;
@@ -23,6 +25,7 @@ const Cell: React.FC<CellProps> = ({
   open,
   handleOpen,
 }) => {
+  console.log(open)
   console.log(displayList);
   console.log(chartTable);
   const date = displayList[0].date;
@@ -38,10 +41,20 @@ const Cell: React.FC<CellProps> = ({
       volume: item.volume,
     })
   );
-  console.log(TabData);
+  const [notesToggle, setnotesToggle] = useState(false);
+
   return (
     <>
-      <Dialog open={open} handler={handleOpen} size="xl">
+      <Dialog
+        open={open}
+        handler={handleOpen}
+        size="xl"
+        className="overflow-y-auto max-h-[500px]"
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+      >
         <DialogHeader>
           {title}
           <Typography
@@ -52,10 +65,18 @@ const Cell: React.FC<CellProps> = ({
           >
             Net P&L ${data.PnL}{" "}
           </Typography>
-          <Button className="mr-0">Add Note</Button>
+          <Button
+            className="mr-0"
+            onClick={() => {
+              setnotesToggle(true);
+            }}
+          >
+            Add Note
+          </Button>
         </DialogHeader>
-        <DialogBody>
-          <div className="flex flex-row mr-2">
+        <DialogBody className="overflow-auto">
+          <div className="flex flex-row mr-2 overflow-auto">
+          {notesToggle && <h1>osdij</h1>}
             <div className="p-2 my-2 bg-slate-900/50 w-2/5 h-[250px] text-black">
               <DailyChart chartTable={chartTable[0][`${data.date}`]} />
             </div>
@@ -63,7 +84,9 @@ const Cell: React.FC<CellProps> = ({
               <div className="px-4 items-center">
                 <div>
                   Total Trades
-                  <span className="px-4 font-bold inline">{data.trade_count}</span>
+                  <span className="px-4 font-bold inline">
+                    {data.trade_count}
+                  </span>
                 </div>
               </div>
               <div className="px-4 items-center">
@@ -99,7 +122,7 @@ const Cell: React.FC<CellProps> = ({
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button variant="gradient" color="green">
             <span>View Details</span>
           </Button>
         </DialogFooter>

@@ -1,17 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import "./Calendar.module.css";
 import Calendar from "rsuite/Calendar";
-import { Whisper, Popover, Badge } from "rsuite";
 import "rsuite/Calendar/styles/index.css";
-import { Typography } from "@mui/material";
-import HalfCircle from "../HalfCircle";
-import { AreaChart } from "recharts";
-import ProgressDemo from "../Progress";
 import { Dailydetails } from "@/Math/NetProfitLoss";
 import FormatDate from "@/Formatting/DateFormat";
 import Cell from "./Cell";
+
 
 function getViewList(
   date: { getDate: () => any },
@@ -22,10 +17,10 @@ function getViewList(
   const list1 = dailyData?.filter((item) => {
     return item.date === key;
   });
-  const list2=exploreCell?.filter((item)=>{
+  const list2 = exploreCell?.filter((item) => {
     return item[key];
-  })
-  return {list1,list2};
+  });
+  return { list1, list2 };
 }
 
 const App = () => {
@@ -47,38 +42,34 @@ const App = () => {
     };
     getData();
   }, [fromD, toD]);
-  
+
   function renderCell(date: { getDate: () => any }) {
     const Data = getViewList(date, dailyData, exploreCell);
-    const displayList=Data.list1;
-    const chartTable=Data.list2;
+    const displayList = Data.list1;
+    const chartTable = Data.list2;
+  
+    console.log(date);
+    console.log(displayList);
+    console.log(chartTable)
     const handleOpen = () => setOpen(!open);
     if (displayList?.length) {
-      const moreItem = (
-        <li>
-          <Whisper
-            placement="top"
-            trigger="click"
-            onClick={handleOpen}
-            speaker={
-              <Popover>
-                <Cell  handleOpen={handleOpen} displayList={displayList} open={open} chartTable={chartTable}/>
-              </Popover>
-            }
-          >
-            <a onClick={handleOpen}>Explore</a>
-          </Whisper>
-        </li>
-      );
-
       return (
-        <ul className="calendar-todo-list ">
+        <ul className="calendar-todo-list overflow-y-auto">
           {displayList.map((item, index) => (
             <li key={index}>
-              <Badge /> <b>{item.PnL}</b>
+              <div>{item.PnL}</div>
+              <div>{displayList[0].trade_count} trades</div>
+              <p onClick={handleOpen}>Explore</p>
+             
+              <Cell
+                key={currentDate.toString()}
+                handleOpen={handleOpen}
+                displayList={displayList}
+                open={open}
+                chartTable={chartTable}
+              />
             </li>
           ))}
-          {moreItem}
         </ul>
       );
     }

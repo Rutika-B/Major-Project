@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/charts/Barchart.tsx", "src/app/charts/Progress.tsx", "src/app/component/Herocard.tsx", "src/app/component/Sidebar.tsx", "src/app/layout.tsx", "src/app/page.tsx", "src/app/charts/HalfCircle.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/charts/Barchart.tsx", "src/app/charts/Progress.tsx", "src/app/component/Herocard.tsx", "src/app/component/Sidebar.tsx", "src/app/layout.tsx", "src/app/page.tsx", "src/app/charts/HalfCircle.tsx", "src/app/api/profit-loss/route.js", "src/app/api/tradecharges/route.js", "src/app/api/holdings/route.js"],
   "exclude": ["node_modules"]
 }

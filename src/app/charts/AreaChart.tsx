@@ -21,15 +21,15 @@ interface DataItem {
 }
 const Example = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
-  const [off, setOff] = useState(0.67);//upward and downward graph separator
+  const [off, setOff] = useState(0.67); //upward and downward graph separator
   const Range = useSelector((state: RootState) => state.reducer.dateRange);
   const fromD = Range.fromDate;
   const toD = Range.toDate;
 
   useEffect(() => {
     const getData = async () => {
-      const Data = await DailyPnL({ fromD, toD });   
-      const dummyData=Data?.result;
+      const Data = await DailyPnL({ fromD, toD });
+      const dummyData = Data?.result;
       if (dummyData) {
         const transformedData = dummyData.map(
           (item: { date: string; profitLoss: any }) => ({
@@ -38,7 +38,7 @@ const Example = () => {
           })
         );
         setData(transformedData);
-        console.log(transformedData)
+        console.log(transformedData);
         const gradientOffset = () => {
           const dataMax = Math.max(
             ...transformedData.map((i: { amount: any }) => i.amount)

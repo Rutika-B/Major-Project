@@ -26,28 +26,28 @@ export function EmptyScreen({
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8 mb-4">
         <h1 className="mb-2 text-lg font-semibold">
-          Welcome to AI SDK 3.0 Generative UI demo!
+          Welcome to The TradeTracker Assistant!
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is a demo of an interactive financial assistant. It can show you
-          stocks, tell you their prices, and even help you buy shares.
+          This is  an interactive financial assistant. It can show you
+          stocks, stock market news, tell you their prices, and even help you buy shares.
         </p>
         <p className="mb-2 leading-normal text-muted-foreground">
-          The demo is built with{' '}
+          {/* The demo is built with{' '}
           <ExternalLink href="https://nextjs.org">Next.js</ExternalLink> and the{' '}
           <ExternalLink href="https://sdk.vercel.ai/docs">
             Vercel AI SDK
-          </ExternalLink>
-          .
+          </ExternalLink> */}
+          
         </p>
         <p className="mb-2 leading-normal text-muted-foreground">
-          It uses{' '}
-          <ExternalLink href="https://vercel.com/blog/ai-sdk-3-generative-ui">
+          {/* It uses{' '} */}
+          {/* <ExternalLink href="https://vercel.com/blog/ai-sdk-3-generative-ui">
             React Server Components
-          </ExternalLink>{' '}
-          to combine text with UI generated as output of the LLM. The UI state
+          </ExternalLink>{' '} */}
+          {/* to combine text with UI generated as output of the LLM. The UI state
           is synced through the SDK so the model is aware of your interactions
-          as they happen.
+          as they happen. */}
         </p>
         <p className="leading-normal text-muted-foreground">Try an example:</p>
         <div className="mt-4 flex flex-col items-start space-y-2 mb-4">
