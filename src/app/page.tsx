@@ -16,7 +16,9 @@ const page = async () => {
     data: { session },
   } = await supabase.auth.getSession();
   if (session) {
-    redirect('https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=88b1eb14-832c-4328-917b-9094278ec0ef&redirect_uri=http://localhost:3000/api/auth/callback/upstox');
+    redirect(
+      "https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=88b1eb14-832c-4328-917b-9094278ec0ef&redirect_uri=http://localhost:3000/api/auth/callback/upstox"
+    );
   }
   return (
     <div>
@@ -28,8 +30,8 @@ const page = async () => {
               All in one Trading Journal for the derivative market traders{" "}
             </h1>
             <span className="text-xl text-gray-800 ">
-              A platform for a stock market FnO traders to improve theire
-              trading skill and performance by analysing there previous trades
+              A platform for a stock market FnO traders to improve their trading
+              skill and performance by analysing there previous trades
             </span>
             <br />
             <Link href={"/signup"}>

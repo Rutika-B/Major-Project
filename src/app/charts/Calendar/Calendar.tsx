@@ -7,7 +7,6 @@ import { Dailydetails } from "@/Math/NetProfitLoss";
 import FormatDate from "@/Formatting/DateFormat";
 import Cell from "./Cell";
 
-
 function getViewList(
   date: { getDate: () => any },
   dailyData: any[] | undefined,
@@ -29,8 +28,7 @@ const App = () => {
 
   const [fromD, setfrom] = useState(currentYear);
   const [toD, setto] = useState(currentYear);
-  const [open, setOpen] = React.useState(false);
-
+  
   const [dailyData, setdailydata] = useState<any[] | undefined>([]);
   const [exploreCell, setExplore] = useState<any[] | undefined>([]);
 
@@ -47,26 +45,23 @@ const App = () => {
     const Data = getViewList(date, dailyData, exploreCell);
     const displayList = Data.list1;
     const chartTable = Data.list2;
-  
-    console.log(date);
-    console.log(displayList);
-    console.log(chartTable)
+
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
+
     if (displayList?.length) {
       return (
         <ul className="calendar-todo-list overflow-y-auto">
           {displayList.map((item, index) => (
-            <li key={index}>
+            <li key={index} onClick={handleOpen}>
               <div>{item.PnL}</div>
               <div>{displayList[0].trade_count} trades</div>
-              <p onClick={handleOpen}>Explore</p>
-             
               <Cell
                 key={currentDate.toString()}
-                handleOpen={handleOpen}
                 displayList={displayList}
-                open={open}
                 chartTable={chartTable}
+                open={open}
+                handleOpen={handleOpen}
               />
             </li>
           ))}

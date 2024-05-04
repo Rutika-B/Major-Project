@@ -23,14 +23,13 @@ const HeroCard = () => {
   
   useEffect(() => {
     const getStats = async () => {
-      console.log(fromD);
-      console.log(toD);
+     
       const netPL = await NetPnL({fromD,toD});
       setnetPL(netPL);
-      console.log(netPL);
+      
       const win = await TradeWin({fromD,toD});
       setWin(win);
-      console.log(win);
+      
       const factor = await ProfitFactor({fromD,toD});
       setfactor(factor);
       const avgWinLoss = await AverageWinLossTrade({fromD,toD});

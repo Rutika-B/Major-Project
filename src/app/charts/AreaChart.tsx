@@ -38,7 +38,6 @@ const Example = () => {
           })
         );
         setData(transformedData);
-        console.log(transformedData);
         const gradientOffset = () => {
           const dataMax = Math.max(
             ...transformedData.map((i: { amount: any }) => i.amount)

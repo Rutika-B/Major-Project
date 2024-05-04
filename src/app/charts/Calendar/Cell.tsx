@@ -25,9 +25,7 @@ const Cell: React.FC<CellProps> = ({
   open,
   handleOpen,
 }) => {
-  console.log(open)
-  console.log(displayList);
-  console.log(chartTable);
+ 
   const date = displayList[0].date;
   const title = DdtoDate(date);
   const data = displayList[0];
@@ -42,7 +40,8 @@ const Cell: React.FC<CellProps> = ({
     })
   );
   const [notesToggle, setnotesToggle] = useState(false);
-
+  console.log(open);
+  console.log(notesToggle);
   return (
     <>
       <Dialog
