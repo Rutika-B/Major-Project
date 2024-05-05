@@ -63,7 +63,7 @@ const Example = () => {
     getData();
   }, [fromD, toD]);
   if (!data) {
-    return <div>Loading your trading graph...</div>;
+    return <Loader/>;
   }
   return (
     <>

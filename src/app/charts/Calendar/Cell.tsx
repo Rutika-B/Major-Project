@@ -1,4 +1,3 @@
-
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
 import DdtoDate from "@/Formatting/reverseFormat";
@@ -25,7 +24,6 @@ const Cell: React.FC<CellProps> = ({
   open,
   handleOpen,
 }) => {
- 
   const date = displayList[0].date;
   const title = DdtoDate(date);
   const data = displayList[0];
@@ -74,8 +72,9 @@ const Cell: React.FC<CellProps> = ({
           </Button>
         </DialogHeader>
         <DialogBody className="overflow-auto">
+          {notesToggle && <Note />}
+
           <div className="flex flex-row mr-2 overflow-auto">
-          {notesToggle && <h1>osdij</h1>}
             <div className="p-2 my-2 bg-slate-900/50 w-2/5 h-[250px] text-black">
               <DailyChart chartTable={chartTable[0][`${data.date}`]} />
             </div>

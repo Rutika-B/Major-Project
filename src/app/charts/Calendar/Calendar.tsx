@@ -53,9 +53,10 @@ const App = () => {
       return (
         <ul className="calendar-todo-list overflow-y-auto">
           {displayList.map((item, index) => (
-            <li key={index} onClick={handleOpen}>
+            <li key={index}>
               <div>{item.PnL}</div>
               <div>{displayList[0].trade_count} trades</div>
+              <p onClick={handleOpen}>explore</p>
               <Cell
                 key={currentDate.toString()}
                 displayList={displayList}
@@ -73,18 +74,22 @@ const App = () => {
   const handleDateRangeChange = (value: any) => {
     const date = new Date(value);
     const year = date.getFullYear();
-    setfrom(year);
-    setto(year);
+   
   };
   return (
     <div className="w-2/3 mx-2 my-4 bg-white">
       <style>
         {`
       .bg-gray {
-        background-color: #32a852;
+        background-color: #74b47e;
+        margin:4px;
+        padding:4px;
       }
       .bg-red{
-        background-color:#f72d33;
+        background-color:#f13b60;
+        margin:4px;
+        padding:4px;
+
       }
       `}
       </style>

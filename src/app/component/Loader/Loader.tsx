@@ -15,7 +15,7 @@ const Loader = () => {
       <CirclesWithBar
         height="50"
         width="50"
-        color="#4fa94d"
+        color="#1b3279"
         visible={true}
         outerCircleColor="var(--accent-green)"
         innerCircleColor="var(--accent-green)"

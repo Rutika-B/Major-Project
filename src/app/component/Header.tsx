@@ -3,11 +3,11 @@ import { RootState } from "@/store/store";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DateRangeInput, DateRangePicker, Stack } from "rsuite";
-import { ValueType } from "rsuite/esm/Checkbox";
+import {DateRangePicker, Stack } from "rsuite";
 import FormatDate from "@/Formatting/DateFormat";
 import { selectedRange } from "@/store/slice";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 const { allowedMaxDays } = DateRangePicker;
 
 interface SideBarProps {
@@ -33,9 +33,10 @@ const Header: React.FC<SideBarProps> = ({ session }) => {
     const payload = { fromDate: fromDate, toDate: toDate }; //store dateRange
     dispatch(selectedRange(payload));
   }
-
+  const router=useRouter();
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    router.refresh();
   };
   
   if (session) {

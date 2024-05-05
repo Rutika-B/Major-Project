@@ -23,17 +23,15 @@ interface DataItem {
 }
 const Cummulative = () => {
   const [data, setData] = useState<DataItem[] | any>([]);
-  const [Loading,setLoading]=useState(false);
+  const [Loading, setLoading] = useState(false);
   const [off, setOff] = useState(0.67);
-  const Range = useSelector(
-    (state: RootState) => state.reducer.dateRange
-  );
-  const fromD=Range.fromDate;
-  const toD=Range.toDate;
+  const Range = useSelector((state: RootState) => state.reducer.dateRange);
+  const fromD = Range.fromDate;
+  const toD = Range.toDate;
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      const dummyData = await CummulativePnL({fromD,toD});
+      const dummyData = await CummulativePnL({ fromD, toD });
       if (dummyData) {
         const transformedData = dummyData.map(
           (item: { date: string; cumulativeProfitLoss: any }) => ({
@@ -62,13 +60,17 @@ const Cummulative = () => {
 
         const off = gradientOffset();
         setOff(off);
-        setLoading(false)
+        setLoading(false);
       }
     };
     getData();
-  }, [fromD,toD]);
+  }, [fromD, toD]);
   if (Loading) {
-    return <div>Loading your trading graph...</div>;
+    return (
+      <div className="flex justify-center items-center text-indigo-800">
+        <Loader />
+      </div>
+    );
   }
   return (
     <>
@@ -103,9 +105,7 @@ const Cummulative = () => {
         </LineChart>
       </ResponsiveContainer>
     </>
-  
   );
 };
 
 export default Cummulative;
-
